@@ -1,2 +1,3 @@
-cpp/build/
-csharp/build/
+**/build/
+**/bin
+**/obj

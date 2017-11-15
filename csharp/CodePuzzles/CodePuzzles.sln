@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_TicketToRideEurope", "CodingGame_community_TicketToRideEurope\CodingGame_community_TicketToRideEurope.csproj", "{C4828DFD-C86A-4076-BCB7-928CC66CD875}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_classic_TeadsSponsoredContest", "CodingGame_classic_TeadsSponsoredContest\CodingGame_classic_TeadsSponsoredContest.csproj", "{8E647772-189E-490E-B55F-137B1EA58C55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_Template", "CodingGame_Template\CodingGame_Template.csproj", "{AF1E86BD-FA12-4802-A9CB-D7EDC181AD92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation", "Validation\Validation.csproj", "{1B9AA25B-2072-4582-A0AF-8FB2AB4E5BEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_TheFatest", "CodingGame_community_TheFatest\CodingGame_community_TheFatest.csproj", "{F46359AE-116E-4D51-B42D-896B86D6DA72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4828DFD-C86A-4076-BCB7-928CC66CD875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4828DFD-C86A-4076-BCB7-928CC66CD875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4828DFD-C86A-4076-BCB7-928CC66CD875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4828DFD-C86A-4076-BCB7-928CC66CD875}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E647772-189E-490E-B55F-137B1EA58C55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E647772-189E-490E-B55F-137B1EA58C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E647772-189E-490E-B55F-137B1EA58C55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E647772-189E-490E-B55F-137B1EA58C55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF1E86BD-FA12-4802-A9CB-D7EDC181AD92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF1E86BD-FA12-4802-A9CB-D7EDC181AD92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF1E86BD-FA12-4802-A9CB-D7EDC181AD92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF1E86BD-FA12-4802-A9CB-D7EDC181AD92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B9AA25B-2072-4582-A0AF-8FB2AB4E5BEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B9AA25B-2072-4582-A0AF-8FB2AB4E5BEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B9AA25B-2072-4582-A0AF-8FB2AB4E5BEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B9AA25B-2072-4582-A0AF-8FB2AB4E5BEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F46359AE-116E-4D51-B42D-896B86D6DA72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F46359AE-116E-4D51-B42D-896B86D6DA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F46359AE-116E-4D51-B42D-896B86D6DA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F46359AE-116E-4D51-B42D-896B86D6DA72}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2DDC6CA8-EEE9-42F1-A4EA-0A8F1292483A}
+	EndGlobalSection
+EndGlobal
