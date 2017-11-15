@@ -5,10 +5,6 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 
-#if LOCAL
-using Validation;
-#endif
-
 class Solution
 {
     static void Solve()
@@ -19,7 +15,7 @@ class Solution
     static void Main(string[] args)
     {
 #if LOCAL
-        SolveAction handler = Solve;
+        Validation.SolveAction handler = Solve;
         Validation.Validator.ValidateSolution(handler);
 #else
         Solve();

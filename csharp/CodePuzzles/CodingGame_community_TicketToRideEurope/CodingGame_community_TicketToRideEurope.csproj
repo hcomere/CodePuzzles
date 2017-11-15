@@ -58,5 +58,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Validation\Validation.csproj">
+      <Project>{1b9aa25b-2072-4582-a0af-8fb2ab4e5bea}</Project>
+      <Name>Validation</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

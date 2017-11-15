@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_Template", "Codi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation", "Validation\Validation.csproj", "{1B9AA25B-2072-4582-A0AF-8FB2AB4E5BEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_TheFatest", "CodingGame_community_TheFatest\CodingGame_community_TheFatest.csproj", "{F46359AE-116E-4D51-B42D-896B86D6DA72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_TheFastest", "CodingGame_community_TheFastest\CodingGame_community_TheFastest.csproj", "{F46359AE-116E-4D51-B42D-896B86D6DA72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
