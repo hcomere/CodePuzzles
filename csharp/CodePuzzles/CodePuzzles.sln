@@ -13,9 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation", "Validation\Va
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_TheFastest", "CodingGame_community_TheFastest\CodingGame_community_TheFastest.csproj", "{F46359AE-116E-4D51-B42D-896B86D6DA72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_classic_MeanMax", "CodingGame_classic_MeanMax\CodingGame_classic_MeanMax.csproj", "{FF2D1AB6-5154-49D2-AB26-2237B9106EA5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer", "Viewer\Viewer.csproj", "{F2DE3070-D5DA-4CD6-A062-286ED8F25A74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechIO_GeneticAlgorithms", "TechIO_GeneticAlgorithms\TechIO_GeneticAlgorithms.csproj", "{CFC25908-5771-47F4-B122-AA502E30E444}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,14 +41,10 @@ Global
 		{F46359AE-116E-4D51-B42D-896B86D6DA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F46359AE-116E-4D51-B42D-896B86D6DA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F46359AE-116E-4D51-B42D-896B86D6DA72}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF2D1AB6-5154-49D2-AB26-2237B9106EA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF2D1AB6-5154-49D2-AB26-2237B9106EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF2D1AB6-5154-49D2-AB26-2237B9106EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF2D1AB6-5154-49D2-AB26-2237B9106EA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F2DE3070-D5DA-4CD6-A062-286ED8F25A74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2DE3070-D5DA-4CD6-A062-286ED8F25A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2DE3070-D5DA-4CD6-A062-286ED8F25A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2DE3070-D5DA-4CD6-A062-286ED8F25A74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFC25908-5771-47F4-B122-AA502E30E444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFC25908-5771-47F4-B122-AA502E30E444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFC25908-5771-47F4-B122-AA502E30E444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC25908-5771-47F4-B122-AA502E30E444}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
