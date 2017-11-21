@@ -18,7 +18,7 @@ namespace Validation
             {
                 string[] fileEntries = Directory.GetFiles(path);
 
-                for (int i = 0; i < 20; ++i)
+                for (int i = 0; i < 30; ++i)
                 {
                     Boolean inputFound = Array.Find(fileEntries, s => s.Equals("data\\input" + i + ".txt")) != null;
                     Boolean outputFound = Array.Find(fileEntries, s => s.Equals("data\\output" + i + ".txt")) != null;
@@ -34,7 +34,11 @@ namespace Validation
             {
                 foreach (int test in foundTests)
                 {
-                    Console.WriteLine("------ TEST CASE " + test + " ------");
+                    Console.WriteLine("");
+                    Console.WriteLine("......................................................");
+                    Console.WriteLine(".. TEST CASE " + test);
+                    Console.WriteLine("......................................................");
+                    Console.WriteLine("");
 
                     Console.SetIn(new StreamReader("data\\input" + test + ".txt"));
                     StreamReader outStreamReader = new StreamReader("data\\output" + test + ".txt");
