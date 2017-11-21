@@ -18,42 +18,42 @@ class Solution
     public const int GRAY = 8;
     public const int ENGINE = 8;
 
-    class Ticket
-    {
-        public int Points { get; set; }
-        public String Start { get; set; }
-        public String End { get; set; }
-
-        public Ticket(int a_points, String a_start, String a_end)
-        {
-            Points = a_points;
-            Start = a_start;
-            End = a_end;
-        }
-    };
+    static List<Ticket> tickets = new List<Ticket>();
+    static List<Road> roads = new List<Road>();
+    static HashSet<UInt64> processedMasks = new HashSet<UInt64>();
+    static int[] colorCount = new int[9];
+    static int trainCarCount = 0;
+    static int totalEvals = 0;
+    static int maxScore = Int32.MinValue;
 
     class Road
     {
         public int Length { get; set; }
         public int RequiredEngines { get; set; }
         public int ColorIdx { get; set; }
-        public String Start { get; set; }
-        public String End { get; set; }
+        public String StartName { get; set; }
+        public String EndName { get; set; }
+        public int Start { get; set; }
+        public int End { get; set; }
         public Boolean IsBuilt { get; set; }
         public Boolean IsChecked { get; set; }
         public Boolean IsEvaluated { get; set; }
+        public int Points { get; }
+        public int Index { get; }
 
-        public Road(int a_length, int a_requiredEngines, String a_color, String a_start, String a_end)
+        public Road(int a_index, int a_length, int a_requiredEngines, String a_color, String a_startName, String a_endName)
         {
             Length = a_length;
             RequiredEngines = a_requiredEngines;
-            Start = a_start;
-            End = a_end;
+            StartName = a_startName;
+            EndName = a_endName;
+            Start = -1;
+            End = -1;
             IsBuilt = false;
             IsChecked = false;
             IsEvaluated = false;
-
-            // 0 red 1 yellow 2 green 3 blue 4 white 5 black 6 orange 7 pink 8 engine 
+            Index = a_index;
+            
             if (a_color.Equals("Red")) ColorIdx = RED;
             else if (a_color.Equals("Yellow")) ColorIdx = YELLOW;
             else if (a_color.Equals("Green")) ColorIdx = GREEN;
@@ -65,129 +65,145 @@ class Solution
             else if (a_color.Equals("Gray")) ColorIdx = GRAY;
             else
                 Console.Error.WriteLine("Unknown road color : " + a_color);
+           
+            if (Length >= 6) Points = 15;
+            else if (Length >= 4) Points = 7;
+            else if (Length >= 3) Points = 4;
+            else if (Length >= 2) Points = 2;
+            else Points = 1;
+        }
+
+        public override string ToString()
+        {
+            return "Road start " + StartName + "(" + Start + ") end " + EndName + "(" + End + ") length " + Length + " color " + ColorIdx + " required engines " + RequiredEngines;
         }
     };
 
-    static List<Ticket> tickets = new List<Ticket>();
-    static List<Road> roads = new List<Road>();
-    static int[] colorCount = new int[9];
-    static int trainCarCount = 0;
-
-    public static int ConvertLengthToPoints(int a_length)
+    class Ticket
     {
-        int pts = 0;
+        public int Points { get; set; }
+        public String StartName { get; set; }
+        public String EndName { get; set; }
+        public int Start { get; set; }
+        public int End { get; set; }
+        public List <UInt64> RoadMasks { get; }
 
-        if (a_length >= 6) pts = 15;
-        else if (a_length >= 4) pts = 7;
-        else if (a_length >= 3) pts = 4;
-        else if (a_length >= 2) pts = 2;
-        else pts = 1;
-
-        return pts;
-    }
-
-    public static Boolean CheckRoad(String a_current, String a_end)
-    {
-        Boolean ok = false;
-
-        for (int i = 0; i < roads.Count; ++i)
+        public Ticket(int a_points, String a_startName, String a_endName)
         {
-            if (roads[i].IsEvaluated)
-                continue;
+            Points = a_points;
+            StartName = a_startName;
+            EndName = a_endName;
+            Start = -1;
+            End = -1;
 
-            String nstart = null;
-            String nend = null;
+            RoadMasks = new List<UInt64>();
+        }
 
-            if (roads[i].Start.Equals(a_current))
+        private void CheckRoad(int a_current, int a_end, ulong a_roadMask, HashSet <ulong> a_goodMasks)
+        {
+            for (int i = 0; i < roads.Count; ++i)
             {
-                nstart = a_current;
-                nend = roads[i].End;
-            }
-            else if (roads[i].End.Equals(a_current))
-            {
-                nstart = a_current;
-                nend = roads[i].Start;
-            }
+                if (roads[i].IsEvaluated)
+                    continue;
 
-            if (nstart != null)
-            {
-                Console.Error.WriteLine("Use road " + nstart + " to " + nend);
+                int nstart = -1;
+                int nend = -1;
 
-                if (nend.Equals(a_end))
+                if (roads[i].Start == a_current)
                 {
-                    Console.Error.WriteLine("End reached !!");
-                    ok = true;
-                    break;
+                    nstart = a_current;
+                    nend = roads[i].End;
                 }
-                else
+                else if (roads[i].End == a_current)
                 {
-                    roads[i].IsEvaluated = true;
-                    ok = CheckRoad(nend, a_end);
-                    roads[i].IsEvaluated = false;
+                    nstart = a_current;
+                    nend = roads[i].Start;
+                }
+
+                if (nstart >= 0)
+                {
+                    if (nend == a_end)
+                    {
+                        ulong mask = a_roadMask | ((UInt64)1 << i);
+                        if (!a_goodMasks.Contains(mask))
+                        {
+                            RoadMasks.Add(mask);
+                            a_goodMasks.Add(mask);
+                        }
+                    }
+                    else
+                    {
+                        roads[i].IsEvaluated = true;
+                        CheckRoad(nend, a_end, a_roadMask | ((UInt64)1 << i), a_goodMasks);
+                        roads[i].IsEvaluated = false;
+                    }
                 }
             }
         }
 
-        return ok;
-    }
-
-    public static int Eval()
-    {
-        Console.Error.WriteLine("=== Eval ==== " + tickets.Count + " tickets");
-
-        int score = 0;
-
-        for (int i = 0; i < tickets.Count; ++i)
+        public void FindRoads()
         {
-            Console.Error.WriteLine("Ticket " + i + " : " + tickets[i].Start + " to " + tickets[i].End + " for " + tickets[i].Points + " pts");
+            HashSet<ulong> goodMasks = new HashSet<ulong>();
+            CheckRoad(Start, End, 0, goodMasks);
+        }
 
-            Boolean ok = CheckRoad(tickets[i].Start, tickets[i].End);
-
-            if (ok)
+        internal bool IsHonoredByRoadMask(ulong a_roadMask)
+        {
+            foreach(ulong roadMask in RoadMasks)
             {
-                Console.Error.WriteLine("Ticket success");
-                score += tickets[i].Points;
+                if ((roadMask & a_roadMask) == roadMask)
+                    return true;
             }
+
+            return false;
+        }
+
+        public override string ToString()
+        {
+            return "Ticket start " + StartName + "(" + Start + ") end " + EndName + "(" + End + ") worth " + Points + " points";
+        }
+    };
+
+    public static int Eval(UInt64 a_roadMask, int a_roadPoints)
+    {
+        /*for (int i = 0; i < 9; ++i)
+        {
+            if (colorCount[i] < 0)
+                Console.Error.WriteLine("Error spotted ! color " + i + ", count " + colorCount[i]);
+        }
+
+        if (trainCarCount < 0)
+            Console.Error.WriteLine("Error spotted ! train car count : " + trainCarCount);
+        */
+
+        ++totalEvals;
+
+        int score = a_roadPoints;
+
+        foreach(Ticket ticket in tickets)
+        {
+            if (ticket.IsHonoredByRoadMask(a_roadMask))
+                score += ticket.Points;
             else
-            {
-                Console.Error.WriteLine("Ticket failure");
-                score -= tickets[i].Points;
-            }
+                score -= ticket.Points;
         }
-
-        for (int i = 0; i < roads.Count; ++i)
-        {
-            if (roads[i].IsBuilt)
-            {
-                int pts = ConvertLengthToPoints(roads[i].Length);
-                Console.Error.WriteLine("Built road " + roads[i].Start + " to " + roads[i].End + " gives " + pts + " points");
-                score += pts;
-            }
-        }
-
-        Console.Error.WriteLine("Score = " + score);
 
         return score;
     }
-
-    public static int ProcessGrayRoad(int a_roadIndex, int a_checkedRoadCount)
+    
+    public static void ProcessGrayRoad(int a_currentRoadIndex, UInt64 a_roadMask, int a_roadsPoints)
     {
-        int maxScore = 0;
-        Boolean needInit = true;
-
-        int usedTrainCar = Math.Min(roads[a_roadIndex].Length, trainCarCount);
-        Boolean canBuild = usedTrainCar == roads[a_roadIndex].Length;
+        int usedTrainCar = Math.Min(roads[a_currentRoadIndex].Length, trainCarCount);
+        Boolean canBuild = usedTrainCar == roads[a_currentRoadIndex].Length;
 
         int usedEngine = 0;
 
         if (canBuild)
         {
-            usedEngine = Math.Min(roads[a_roadIndex].RequiredEngines, colorCount[ENGINE]);
-            canBuild = usedEngine == roads[a_roadIndex].RequiredEngines;
+            usedEngine = Math.Min(roads[a_currentRoadIndex].RequiredEngines, colorCount[ENGINE]);
+            canBuild = usedEngine == roads[a_currentRoadIndex].RequiredEngines;
         }
-
-        Boolean hasBeenBuiltOnce = false;
-
+        
         for (int i = 0; i < 8; ++i)
         {
             int usedColorCard = 0;
@@ -197,132 +213,96 @@ class Solution
 
             if (localCanBuild)
             {
-                usedColorCard = Math.Min(roads[a_roadIndex].Length - usedEngine, colorCount[i]);
-                usedExtraEngine = Math.Min(roads[a_roadIndex].Length - usedEngine - usedColorCard, colorCount[ENGINE]);
-                localCanBuild = (usedEngine + usedColorCard + usedExtraEngine) == roads[a_roadIndex].Length;
+                usedColorCard = Math.Min(roads[a_currentRoadIndex].Length - usedEngine, colorCount[i]);
+                usedExtraEngine = Math.Min(roads[a_currentRoadIndex].Length - usedEngine - usedColorCard, colorCount[ENGINE] - usedEngine);
+
+                localCanBuild = usedColorCard > 0 && (usedEngine + usedColorCard + usedExtraEngine) == roads[a_currentRoadIndex].Length;
+
+                //if (usedEngine + usedColorCard + usedExtraEngine > roads[a_currentRoadIndex].Length)
+                //    Console.Error.WriteLine("Error spotted ! Too much cards are used o.O");
             }
 
             if (localCanBuild)
             {
-                Console.Error.WriteLine("Can build gray road " + roads[a_roadIndex].Start + " to " + roads[a_roadIndex].End + " using color " + i);
-                hasBeenBuiltOnce = true;
-
                 trainCarCount -= usedTrainCar;
-                roads[a_roadIndex].IsBuilt = true;
+                roads[a_currentRoadIndex].IsBuilt = true;
                 colorCount[i] -= usedColorCard;
-                colorCount[ENGINE] = colorCount[ENGINE] - usedEngine - usedExtraEngine;
+                colorCount[ENGINE] -= (usedEngine + usedExtraEngine);
 
-                int score = Compute(a_checkedRoadCount + 1);
+                UInt64 newRoadMask = a_roadMask;
+                Compute(a_currentRoadIndex + 1, a_roadMask | ((UInt64)1 << a_currentRoadIndex), a_roadsPoints + roads[a_currentRoadIndex].Points);
 
-                if (needInit || score > maxScore)
-                {
-                    maxScore = score;
-                    needInit = false;
-                }
-
-                trainCarCount += usedTrainCar;
-                roads[a_roadIndex].IsBuilt = false;
+                colorCount[ENGINE] += (usedEngine + usedExtraEngine);
                 colorCount[i] += usedColorCard;
-                colorCount[ENGINE] += usedEngine + usedExtraEngine;
+                roads[a_currentRoadIndex].IsBuilt = false;
+                trainCarCount += usedTrainCar;
             }
-            //else
-            //    Console.Error.WriteLine("CANNOT build gray road " + roads[a_roadIndex).start + " to " + roads[a_roadIndex).end + " using color " + i); 
-
         }
 
-        if (!hasBeenBuiltOnce)
-            maxScore = Compute(a_checkedRoadCount + 1);
-
-        return maxScore;
+        Compute(a_currentRoadIndex + 1, a_roadMask, a_roadsPoints);
     }
 
-    public static int ProcessColorRoad(int a_roadIndex, int a_checkedRoadCount)
+    public static void ProcessColorRoad(int a_currentRoadIndex, UInt64 a_roadMask, int a_roadsPoints)
     {
-        int usedTrainCar = Math.Min(roads[a_roadIndex].Length, trainCarCount);
-        Boolean canBuild = usedTrainCar == roads[a_roadIndex].Length;
+        int usedTrainCar = Math.Min(roads[a_currentRoadIndex].Length, trainCarCount);
+        Boolean canBuild = usedTrainCar == roads[a_currentRoadIndex].Length;
 
         int usedColorCard = 0;
         int usedEngine = 0;
 
         if (canBuild)
         {
-            usedColorCard = Math.Min(colorCount[roads[a_roadIndex].ColorIdx], roads[a_roadIndex].Length);
-            usedEngine = Math.Min(colorCount[ENGINE], roads[a_roadIndex].Length - usedColorCard);
-            canBuild = (usedColorCard + usedEngine) == roads[a_roadIndex].Length;
+            usedColorCard = Math.Min(colorCount[roads[a_currentRoadIndex].ColorIdx], roads[a_currentRoadIndex].Length);
+            usedEngine = Math.Min(colorCount[ENGINE], roads[a_currentRoadIndex].Length - usedColorCard);
+            canBuild = (usedColorCard + usedEngine) == roads[a_currentRoadIndex].Length;
         }
 
         if (canBuild)
         {
             trainCarCount -= usedTrainCar;
-            roads[a_roadIndex].IsBuilt = true;
-            colorCount[roads[a_roadIndex].ColorIdx] -= usedColorCard;
+            roads[a_currentRoadIndex].IsBuilt = true;
+            colorCount[roads[a_currentRoadIndex].ColorIdx] -= usedColorCard;
             colorCount[ENGINE] -= usedEngine;
-            Console.Error.WriteLine("Can build color road " + roads[a_roadIndex].ColorIdx + " " + roads[a_roadIndex].Start + " to " + roads[a_roadIndex].End);
-        }
-        else
-        {
-            //Console.Error.WriteLine("CANNOT build color " + roads[a_roadIndex].ColorIdx + " " + roads[a_roadIndex).start + " to " + roads[a_roadIndex).end);
-            //if(trainCarCount < roads[a_roadIndex].Length) Console.Error.WriteLine("Not enough train cars");
-            //else if(colorCount[roads[a_roadIndex].ColorIdx] < roads[a_roadIndex].Length) Console.Error.WriteLine("Not enough color cards");
-        }
 
+            Compute(a_currentRoadIndex + 1, a_roadMask | ((UInt64)1 << a_currentRoadIndex), a_roadsPoints + roads[a_currentRoadIndex].Points);
 
-        int score = Compute(a_checkedRoadCount + 1);
-
-        if (canBuild)
-        {
-            trainCarCount += usedTrainCar;
-            roads[a_roadIndex].IsBuilt = false;
-            colorCount[roads[a_roadIndex].ColorIdx] += usedColorCard;
             colorCount[ENGINE] += usedEngine;
+            colorCount[roads[a_currentRoadIndex].ColorIdx] += usedColorCard;
+            roads[a_currentRoadIndex].IsBuilt = false;
+            trainCarCount += usedTrainCar;
         }
 
-        return score;
+        Compute(a_currentRoadIndex + 1, a_roadMask, a_roadsPoints);
     }
 
-    public static int Compute(int a_checkedRoadCount)
+    static void Compute(int a_currentRoadIndex, UInt64 a_roadMask, int a_roadsPoints)
     {
-        int maxScore = 0;
-        Boolean needInit = true;
-
-        if (a_checkedRoadCount == roads.Count)
+        if (a_currentRoadIndex == roads.Count)
         {
-            Console.Error.WriteLine("Permutation found");
-            maxScore = Eval();
+            if (! processedMasks.Contains(a_roadMask))
+            {
+                int score = Eval(a_roadMask, a_roadsPoints);
+                if (score > maxScore) maxScore = score;
+                
+                processedMasks.Add(a_roadMask);
+            }
         }
         else
         {
-            int score = 0;
-
-            for (int i = 0; i < roads.Count; ++i)
-            {
-                if (roads[i].IsChecked)
-                    continue;
-
-                roads[i].IsChecked = true;
-
-                if (roads[i].ColorIdx == GRAY)
-                    score = ProcessGrayRoad(i, a_checkedRoadCount);
-                else
-                    score = ProcessColorRoad(i, a_checkedRoadCount);
-
-                if (needInit || score > maxScore)
-                {
-                    needInit = false;
-                    maxScore = score;
-                }
-
-                roads[i].IsChecked = false;
-            }
+            if (roads[a_currentRoadIndex].ColorIdx == GRAY)
+                ProcessGrayRoad(a_currentRoadIndex, a_roadMask, a_roadsPoints);
+            else
+                ProcessColorRoad(a_currentRoadIndex, a_roadMask, a_roadsPoints);     
         }
-
-        return maxScore;
     }
 
     static void Solve()
     {
         tickets.Clear();
         roads.Clear();
+        processedMasks.Clear();
+        totalEvals = 0;
+        maxScore = Int32.MinValue;
 
         string[] inputs;
         inputs = Console.ReadLine().Split(' ');
@@ -341,8 +321,7 @@ class Solution
             Console.Error.Write(colorCount[i] + " ");
         }
         Console.Error.WriteLine("");
-
-
+        
         for (int i = 0; i < numTickets; i++)
         {
             inputs = Console.ReadLine().Split(' ');
@@ -352,11 +331,52 @@ class Solution
         for (int i = 0; i < numRoutes; i++)
         {
             inputs = Console.ReadLine().Split(' ');
-            roads.Add(new Road(int.Parse(inputs[0]), int.Parse(inputs[1]), inputs[2], inputs[3], inputs[4]));
-            Console.Error.WriteLine(roads[roads.Count - 1]);
+            roads.Add(new Road(i, int.Parse(inputs[0]), int.Parse(inputs[1]), inputs[2], inputs[3], inputs[4]));
         }
-        
-        Console.WriteLine(Compute(0));
+
+        int currentCityIndex = 0;
+        Dictionary<String, int> cityMap = new Dictionary<String, int>();
+
+        foreach(Road road in roads)
+        {
+            if (! cityMap.TryGetValue(road.StartName, out int start))
+            {
+                start = currentCityIndex++;
+                cityMap.Add(road.StartName, start);
+            }
+
+            road.Start = start;
+
+            if (!cityMap.TryGetValue(road.EndName, out int end))
+            {
+                end = currentCityIndex++;
+                cityMap.Add(road.EndName, end);
+            }
+
+            road.End = end;
+
+            Console.Error.WriteLine(road);
+        }
+
+        foreach(Ticket ticket in tickets)
+        {
+            if (cityMap.TryGetValue(ticket.StartName, out int start))
+                ticket.Start = start;
+            else
+                Console.Error.WriteLine("A ticket reference unknown city " + ticket.StartName + " as start");
+
+            if (cityMap.TryGetValue(ticket.EndName, out int end))
+                ticket.End = end;
+            else
+                Console.Error.WriteLine("A ticket reference unknown city " + ticket.EndName + " as end");
+
+            ticket.FindRoads();
+            Console.Error.WriteLine(ticket);
+        }
+
+        Compute(0, 0, 0);
+        Console.Error.WriteLine("Total evaluations : " + totalEvals);
+        Console.WriteLine(maxScore);
     }
 
     static void Main(string[] args)

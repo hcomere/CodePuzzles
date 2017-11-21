@@ -1,0 +1,27 @@
+25 5 20
+2 5 5 4 5 3 5 7 3
+21 Cadiz Stockholm
+8 Marseille Essen
+8 Madrid Zurich
+8 Madrid Dieppe
+7 Amsterdam Pamplona
+3 0 Orange Cadiz Madrid
+3 0 Black Madrid Pamplona
+2 0 Yellow Madrid Barcelona
+2 0 Gray Barcelona Pamplona
+4 0 Blue Pamplona Paris
+2 0 Pink Marseille Zurich
+3 0 Gray Zurich Paris
+1 0 Pink Paris Dieppe
+2 0 Yellow Paris Bruxelles
+2 0 Green Dieppe Bruxelles
+2 0 Blue Bruxelles Frankfurt
+2 0 Yellow Zurich Munchen
+2 0 Pink Munchen Frankfurt
+2 0 Green Essen Frankfurt
+3 0 White Paris Frankfurt
+3 0 Yellow Amsterdam Essen
+2 0 White Frankfurt Amsterdam
+1 0 Black Bruxelles Amsterdam
+3 1 Gray Essen Kobenhavn
+3 0 White Kobenhavn Stockholm
