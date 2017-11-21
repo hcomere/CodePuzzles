@@ -20,3 +20,4 @@ include(ConfigureFiles)
 # Problems projects inclusion
 
 add_subdirectory(puzzles)
+add_subdirectory(validation)
