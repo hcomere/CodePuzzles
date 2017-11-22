@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_TheFas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechIO_GeneticAlgorithms", "TechIO_GeneticAlgorithms\TechIO_GeneticAlgorithms.csproj", "{CFC25908-5771-47F4-B122-AA502E30E444}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_contest_CodeVsZombies", "CodingGame_contest_CodeVsZombies\CodingGame_contest_CodeVsZombies.csproj", "{815A8796-3D95-467F-B77F-5646C525D553}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{CFC25908-5771-47F4-B122-AA502E30E444}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFC25908-5771-47F4-B122-AA502E30E444}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFC25908-5771-47F4-B122-AA502E30E444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{815A8796-3D95-467F-B77F-5646C525D553}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{815A8796-3D95-467F-B77F-5646C525D553}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{815A8796-3D95-467F-B77F-5646C525D553}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{815A8796-3D95-467F-B77F-5646C525D553}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
