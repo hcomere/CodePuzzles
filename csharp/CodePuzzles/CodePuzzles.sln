@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_contest_MeanMax"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_engine_MeanMax", "CodingGame_engine_MeanMax\CodingGame_engine_MeanMax.csproj", "{EDAF1E14-9DA4-4C19-956C-046C3438DC3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_classic_RollerCoaster", "CodingGame_classic_RollerCoaster\CodingGame_classic_RollerCoaster.csproj", "{2BD8BF8D-7655-4076-AA2E-B496B2F3C717}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{EDAF1E14-9DA4-4C19-956C-046C3438DC3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDAF1E14-9DA4-4C19-956C-046C3438DC3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDAF1E14-9DA4-4C19-956C-046C3438DC3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD8BF8D-7655-4076-AA2E-B496B2F3C717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD8BF8D-7655-4076-AA2E-B496B2F3C717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD8BF8D-7655-4076-AA2E-B496B2F3C717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD8BF8D-7655-4076-AA2E-B496B2F3C717}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
