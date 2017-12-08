@@ -22,11 +22,11 @@ class Player
     const int TARGET_LANDING_MAX_VERTICAL_SPEED = 40;
     const int TARGET_LANDING_MAX_HORIZONTAL_SPEED = 20;
 
-    const int TURN_TO_SIMULATE_COUNT = 10;
     const float GRADED_RETAIN_PERCENT = 0.3f;
     const float NONGRADED_RETAIN_PERCENT = 0.2f;
 
-    const int POPULATION_SIZE = 500;
+    const int TURN_TO_SIMULATE_COUNT = 2;
+    const int POPULATION_SIZE = 10;
     const int MUTATION_PROBABILITY = 2;
 
     static Random g_random = new Random();
@@ -75,6 +75,11 @@ class Player
         {
             return (a_v2.X - a_v1.X) * (a_v2.X - a_v1.X) + (a_v2.Y - a_v1.Y) * (a_v2.Y - a_v1.Y);
         }
+
+        public override string ToString()
+        {
+            return "(" + X + "," + Y + ")";
+        }
     }
 
     class TurnAction
@@ -114,94 +119,162 @@ class Player
         public int Angle { get; set; }
         public Vector2 Speed { get; set; }
         public int Thrust { get; set; }
+        public bool Alive { get; set; }
+        public bool Landed { get; set; }
         
         public ShuttleState()
         {
             Position = new Vector2(0, 0);
             Speed = new Vector2(0, 0);
-        }
-    }
-
-    class TurnResult
-    {
-        public ShuttleState State { get; set; }
-        
-        public TurnResult()
-        {
-            State = new ShuttleState();
-        }
-    }
-
-    class FlatGround
-    {
-        public Vector2 Start { get; set; }
-        public Vector2 End { get; set; }
-
-        public FlatGround()
-        {
-            Start = new Vector2(0, 0);
-            End = new Vector2(0, 0);
+            Alive = true;
+            Landed = false;
         }
 
         public override string ToString()
         {
-            return "FlatGround : (" + Start.X + "," + Start.Y + ") to (" + End.X + "," + End.Y + ")";
+            return "ShuttleState  : Pos(" + Position.X + "," + Position.Y + ") Speed(" + Speed.X + "," + Speed.Y + ") Fuel(" + Fuel + ") Angle(" + Angle + ") Thrust(" + Thrust + ")";
         }
     }
 
-    static TurnResult PlayTurn(ShuttleState a_state, TurnAction a_action)
+    class Line
     {
-        TurnResult result = new TurnResult();
+        public double StartX { get; private set; }
+        public double EndX { get; private set; }
+        public double StartY { get; private set; }
+        public double EndY { get; private set; }
+        public double MiddleX { get; private set; }
+        public double MiddleY { get; private set; }
 
-        int newAngle = Math.Max(Math.Min(a_state.Angle + a_action.AngleDelta, 90), -90);
-        int newThrust = Math.Max(Math.Min(a_state.Thrust + a_action.ThrustDelta, 4), 0);
+        private double A { get; set; }
+        private double B { get; set; }
+        
+        public Line(double a_startX, double a_startY, double a_endX, double a_endY)
+        {
+            StartX = a_startX;
+            StartY = a_startY;
+            EndX = a_endX;
+            EndY = a_endY;
+
+            MiddleX = (a_startX + a_endX) * 0.5;
+            MiddleY = (a_startY + a_endY) * 0.5;
+
+            A = (EndY - StartY) / (EndX - StartX);
+            B = StartY - StartX * A;
+        }
+
+        public bool IsFlat()
+        {
+            return StartY == EndY;
+        }
+
+        public override string ToString()
+        {
+            return "Line (" + StartX + "," + StartY + ") to (" + EndX + "," + EndY + ")";
+        }
+
+        public bool CollideWith(double a_startX, double a_startY, double a_endX, double a_endY)
+        {
+            if (Math.Max(StartX, EndX) < Math.Min(a_startX, a_endX))
+                return false;
+
+            double a = (a_endY - a_startY) / (a_endX - a_startX);
+            double b = a_startY - a_startX * a;
+
+            if (A == a)
+                return false;
+
+            double x = (b - B) / (A - a);
+            double y = A * x + B;
+
+            double xmin = Math.Max(Math.Min(StartX, EndX), Math.Min(a_startX, a_endX));
+            double xmax = Math.Min(Math.Max(StartX, EndX), Math.Max(a_startX, a_endX));
+
+            return x >= xmin && x <= xmax;
+        }
+    }
+
+    static ShuttleState PlayTurn(ShuttleState a_state, TurnAction a_action, List <Line> a_groundLines)
+    {
+        ShuttleState result = new ShuttleState();
+
+        int newAngle = Math.Max(Math.Min(a_state.Angle + a_action.AngleDelta, MAX_ANGLE), MIN_ANGLE);
+        int newThrust = Math.Max(Math.Min(a_state.Thrust + a_action.ThrustDelta, MAX_THRUST), MIN_THRUST);
 
         //Console.Error.WriteLine(">> " + newAngle);
 
-        double newVx = a_state.Speed.X + Math.Cos(newAngle * Math.PI / 180) * newThrust;
-        double newVy = a_state.Speed.Y - GRAVITY + Math.Sin(newAngle * Math.PI / 180) * newThrust;
+        double xdirection = newAngle >= 0 ? -1 : 1;
+
+        double newVx = a_state.Speed.X + xdirection * Math.Sin(newAngle * Math.PI / 180) * newThrust;
+        double newVy = a_state.Speed.Y - GRAVITY + Math.Cos(newAngle * Math.PI / 180) * newThrust;
         double newPosX = a_state.Position.X + newVx;
         double newPosY = a_state.Position.Y + newVy;
 
-        result.State.Angle = newAngle;
-        result.State.Speed.Set(newVx, newVy);
-        result.State.Fuel = a_state.Fuel - newThrust;
-        result.State.Position.Set(newPosX, newPosY);
-        result.State.Thrust = newThrust;
+        result.Angle = newAngle;
+        result.Speed.Set(newVx, newVy);
+        result.Fuel = a_state.Fuel - newThrust;
+        result.Position.Set(newPosX, newPosY);
+        result.Thrust = newThrust;
+
+        // Check intersection with ground
+
+        int collidedLineIndex = a_groundLines.FindIndex(gl => gl.CollideWith(a_state.Position.X, a_state.Position.Y, newPosX, newPosY));
+
+        if (collidedLineIndex != -1)
+        {
+            if(a_groundLines[collidedLineIndex].IsFlat())
+            {
+                if (result.Angle == TARGET_LANDING_ANGLE && result.Speed.X <= TARGET_LANDING_MAX_HORIZONTAL_SPEED && result.Speed.Y <= TARGET_LANDING_MAX_VERTICAL_SPEED)
+                    result.Landed = true;
+                else
+                    result.Alive = false;
+            }
+            else
+                result.Alive = false;
+        }
 
         return result;
     }
 
-    static double Evaluate(ShuttleState a_state, FlatGround a_flatGround)
-    {
-        double score = 0;
-
-        if (a_state.Position.X > a_flatGround.Start.X && a_state.Position.X < a_flatGround.End.X)
-            score += 10000;
-        else
-        {
-            double dist = Math.Min(Math.Abs(a_state.Position.X - a_flatGround.Start.X), Math.Abs(a_state.Position.X - a_flatGround.End.X));
-            //Console.Error.WriteLine("dist : " + dist);
-            score += 10000 - dist;
-        }
-
-        return score;
-    }
-
-    static double GetScore(Chromosome a_chromosome, ShuttleState a_state, FlatGround a_flatGround)
+    static double GetScore(Chromosome a_chromosome, ShuttleState a_state, List<Line> a_groundLines, int a_flatGroundLineIdx)
     {
         ShuttleState state = a_state;
 
-        //Console.Error.WriteLine("=====");
+        Console.Error.WriteLine("- Get score for " + a_chromosome + ", initial pos is " + a_state.Position);
 
         foreach (int i in Enumerable.Range(0, TURN_TO_SIMULATE_COUNT))
         {
             //Console.Error.WriteLine(a_chromosome.TurnActions[i].AngleDelta);
-            TurnResult turnResult = PlayTurn(state, a_chromosome.TurnActions[i]);
-            state = turnResult.State;
+            state = PlayTurn(state, a_chromosome.TurnActions[i], a_groundLines);
+            
+            if (state.Fuel <= 0 || ! state.Alive || state.Landed)
+                break;
         }
 
-        return Evaluate(state, a_flatGround);
+        // Score about landed state or not
+
+        double landedScore = state.Landed ? 1 : 0;
+
+        // Score about distance on X axis to middle of flat ground
+
+        double xdist = Math.Abs(state.Position.X - a_groundLines[a_flatGroundLineIdx].MiddleX);
+        double xdistScore = 1 - xdist / ZONE_WIDTH;
+
+        // Score about distance on X axis to middle of flat ground
+
+        double ydist = Math.Abs(state.Position.Y - a_groundLines[a_flatGroundLineIdx].MiddleY);
+        double ydistScore = 1 - ydist / ZONE_HEIGHT;
+
+        // Final weighted score
+        // Solution that are landed wins
+        // Favorise first solution close to the land area on x axis
+        // Favorise the solutions close to the land area on y axis
+
+        double score = 3 * landedScore + 2 * xdistScore + ydistScore;
+
+        Console.Error.WriteLine("Final state : " + state);
+        Console.Error.WriteLine("Score is " + score + " (" + landedScore + ", " + xdistScore + ", " + ydistScore);
+
+        return score;
     }
 
     static Chromosome CreateChromosome()
@@ -232,6 +305,9 @@ class Player
         foreach (int i in Enumerable.Range(0, a_popSize))
             chroms.Add(CreateChromosome());
 
+        Console.Error.WriteLine("=== NEW POP ===");
+        chroms.ForEach(c => Console.Error.WriteLine(c));
+
         return chroms;
     }
 
@@ -241,7 +317,7 @@ class Player
         int comp = g_random.Next(0, 2);
         int minValue = comp == 0 ? -MAX_ANGLE_DELTA : -MAX_THRUST_DELTA;
         int maxValue = comp == 0 ? MAX_ANGLE_DELTA : MAX_THRUST_DELTA;
-        int val = g_random.Next(0, maxValue);
+        int val = g_random.Next(minValue, maxValue+1);
 
         if (comp == 0)
             a_chromosome.TurnActions[turn].AngleDelta = val;
@@ -249,13 +325,13 @@ class Player
             a_chromosome.TurnActions[turn].ThrustDelta = val;
     }
 
-    static List<Chromosome> Selection(List<Chromosome> a_chromosomes, ShuttleState a_state, FlatGround a_flatGround)
+    static List<Chromosome> Selection(List<Chromosome> a_chromosomes, ShuttleState a_state, List<Line> a_groundLines, int a_flatGroundLineIdx)
     {
         List<Tuple<Chromosome, double>> chromsWithScore = new List<Tuple<Chromosome, double>>();
 
         foreach (Chromosome chromosome in a_chromosomes)
         {
-            double score = GetScore(chromosome, a_state, a_flatGround);
+            double score = GetScore(chromosome, a_state, a_groundLines, a_flatGroundLineIdx);
             chromsWithScore.Add(new Tuple<Chromosome, double>(chromosome, score));
         }
 
@@ -272,6 +348,9 @@ class Player
 
         int bestChromsCountToSelect = (int)Math.Floor(a_chromosomes.Count * GRADED_RETAIN_PERCENT);
         int randomChromsCountToSelect = (int)Math.Floor(a_chromosomes.Count * NONGRADED_RETAIN_PERCENT);
+
+        //Console.Error.WriteLine("" + bestChromsCountToSelect + " chroms to select from bests");
+        //Console.Error.WriteLine("" + randomChromsCountToSelect + " chroms to select randomly");
 
         List<bool> selected = Enumerable.Repeat(false, a_chromosomes.Count).ToList();
 
@@ -321,9 +400,13 @@ class Player
         return child;
     }
 
-    static List<Chromosome> Generation(List<Chromosome> a_population, ShuttleState a_state, FlatGround a_flatGround)
+    static List<Chromosome> Generation(List<Chromosome> a_population, ShuttleState a_state, List <Line> a_groundLines, int a_flatGroundLineIdx)
     {
-        List<Chromosome> select = Selection(a_population, a_state, a_flatGround);
+        List<Chromosome> select = Selection(a_population, a_state, a_groundLines, a_flatGroundLineIdx);
+
+        //Console.Error.WriteLine("--- SELECTION ---");
+        //select.ForEach(c => Console.Error.WriteLine(c));
+
         List<Chromosome> children = new List<Chromosome>();
 
         while (children.Count < POPULATION_SIZE - select.Count)
@@ -356,44 +439,37 @@ class Player
         string[] inputs;
         int surfaceN = int.Parse(Console.ReadLine()); // the number of points used to draw the surface of Mars.
 
-        FlatGround flatGround = new FlatGround();
-        bool found = false;
+        List<Line> groundLines = new List<Line>();
+
+        int prevLandX = -1;
+        int prevLandY = -1;
+        int flatGroundLineIdx = -1;
 
         for (int i = 0; i < surfaceN; i++)
         {
             inputs = Console.ReadLine().Split(' ');
+
             int landX = int.Parse(inputs[0]); // X coordinate of a surface point. (0 to 6999)
             int landY = int.Parse(inputs[1]); // Y coordinate of a surface point. By linking all the points together in a sequential fashion, you form the surface of Mars.
-
-            Console.Error.WriteLine(landX + " " + landY);
-
-            if (i == 0)
+        
+            if (i > 0)
             {
-                flatGround.Start.X = landX;
-                flatGround.Start.Y = landY;
+                if (landY == prevLandY)
+                    flatGroundLineIdx = groundLines.Count;
+
+                groundLines.Add(new Line(prevLandX, prevLandY, landX, landY));
             }
-            else if(! found)
-            {
-                if(flatGround.Start.Y == landY)
-                {
-                    flatGround.End.X = landX;
-                    flatGround.End.Y = landY;
-                    found = true;
-                }
-                else
-                {
-                    flatGround.Start.X = landX;
-                    flatGround.Start.Y = landY;
-                }
-            }
+
+            prevLandX = landX;
+            prevLandY = landY;
         }
 
-        Console.Error.WriteLine(flatGround);
+        Console.Error.WriteLine("Flat ground : " + groundLines[flatGroundLineIdx]);
 
         // game loop
         while (true)
         {
-            Console.Error.WriteLine("===========");
+            //Console.Error.WriteLine("===========");
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -409,18 +485,18 @@ class Player
             state.Angle = int.Parse(inputs[5]); // the rotation angle in degrees (-90 to 90).
             state.Thrust = int.Parse(inputs[6]); // the thrust power (0 to 4).
 
-            // Write an action using Console.WriteLine()
-            // To debug: Console.Error.WriteLine("Debug messages...");
+            Console.Error.WriteLine(state);
 
             List<Chromosome> population = CreatePopulation(POPULATION_SIZE);
 
             int generation = 0;
 
-            while (stopWatch.ElapsedMilliseconds < 100)
+            //while (stopWatch.ElapsedMilliseconds < 100)
+            while(generation < 2)
             {
                 //Console.Error.WriteLine("Elapsed time = " + elapsedTime + " | population size = " + population.Count);
 
-                population = Generation(population, state, flatGround);
+                population = Generation(population, state, groundLines, flatGroundLineIdx);
                 ++generation;
             }
 

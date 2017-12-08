@@ -18,6 +18,8 @@
 
 #ifndef _WIN32
 #include "exercise.hpp"
+#else
+#include <Validator.h>
 #endif 
 
 #ifndef _WIN32
@@ -32,19 +34,8 @@ ContestExerciseImpl::ContestExerciseImpl() : Exercise() {}
 
 using namespace std;
 
-#ifndef _WIN32
-void ContestExerciseImpl::main()
-#else
-int main(int argc, char ** argv)
-#endif
+void solve()
 {
-#ifdef _WIN32
-	ifstream in("data/input4.txt");
-	if (! in) throw runtime_error("Invalid input file");
-	streambuf *cinbuf = std::cin.rdbuf();
-	cin.rdbuf(in.rdbuf());
-#endif 
-
 	int N;
 	cin >> N;
 
@@ -53,7 +44,7 @@ int main(int argc, char ** argv)
 	{
 		int val1, val2;
 		cin >> val1 >> val2;
-	
+
 		if (val1 > val2)
 			++p[0];
 		else if (val2 > val1)
@@ -61,7 +52,18 @@ int main(int argc, char ** argv)
 	}
 
 	cout << (p[0] > p[1] ? "A" : "B") << endl;
-#ifdef _WIN32
-	getchar();
+}
+
+#ifndef _WIN32
+void ContestExerciseImpl::main()
+#else
+int main(int argc, char ** argv)
+#endif
+{
+#if _WIN32
+	Validation::SolveAction action = bind(solve);
+	Validation::Validator::validateSolution(action);
+#else
+	solve();
 #endif
 }

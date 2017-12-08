@@ -9,6 +9,22 @@ add_executable(
     main.cpp
 )
 
+# Include directories
+
+include_directories(../../../Validation)
+
+# Dependencies
+
+add_dependencies(
+    ${EXECUTABLE_NAME}
+    Validation
+)
+
+target_link_libraries(
+    ${EXECUTABLE_NAME}
+    Validation
+)
+
 # Copy data
 
 configure_files(

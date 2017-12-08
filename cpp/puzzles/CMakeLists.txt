@@ -4,3 +4,4 @@
 #add_subdirectory(battledev_nov2017)
 #add_subdirectory(battledev_template)
 add_subdirectory(codinggame_classic)
+#add_subdirectory(codinggame_community)

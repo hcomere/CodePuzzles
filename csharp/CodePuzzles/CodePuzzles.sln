@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_TicketToRideEurope", "CodingGame_community_TicketToRideEurope\CodingGame_community_TicketToRideEurope.csproj", "{C4828DFD-C86A-4076-BCB7-928CC66CD875}"
 EndProject
@@ -26,6 +26,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_engine_MeanMax", "CodingGame_engine_MeanMax\CodingGame_engine_MeanMax.csproj", "{EDAF1E14-9DA4-4C19-956C-046C3438DC3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_classic_RollerCoaster", "CodingGame_classic_RollerCoaster\CodingGame_classic_RollerCoaster.csproj", "{2BD8BF8D-7655-4076-AA2E-B496B2F3C717}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_classic_MarsLander1", "CodingGame_classic_MarsLander1\CodingGame_classic_MarsLander1.csproj", "{62EBBC66-8642-45BF-9F55-D17802B25187}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_engine_Base", "CodingGame_engine_Base\CodingGame_engine_Base.csproj", "{D8C972D7-78CA-4354-A06B-DB4F6BB3FA2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_OweWayCity", "CodingGame_community_OweWayCity\CodingGame_community_OweWayCity.csproj", "{801CF33D-BE7F-4801-8114-D86873EEAFA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +87,18 @@ Global
 		{2BD8BF8D-7655-4076-AA2E-B496B2F3C717}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BD8BF8D-7655-4076-AA2E-B496B2F3C717}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BD8BF8D-7655-4076-AA2E-B496B2F3C717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62EBBC66-8642-45BF-9F55-D17802B25187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62EBBC66-8642-45BF-9F55-D17802B25187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62EBBC66-8642-45BF-9F55-D17802B25187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62EBBC66-8642-45BF-9F55-D17802B25187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8C972D7-78CA-4354-A06B-DB4F6BB3FA2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8C972D7-78CA-4354-A06B-DB4F6BB3FA2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8C972D7-78CA-4354-A06B-DB4F6BB3FA2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8C972D7-78CA-4354-A06B-DB4F6BB3FA2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{801CF33D-BE7F-4801-8114-D86873EEAFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{801CF33D-BE7F-4801-8114-D86873EEAFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{801CF33D-BE7F-4801-8114-D86873EEAFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{801CF33D-BE7F-4801-8114-D86873EEAFA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CodingGame_engine_MarsLander
 {
-    /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private Canvas Canvas { get; set; }
@@ -26,7 +15,9 @@ namespace CodingGame_engine_MarsLander
         private double WidthRatio { get; set; }
         private double HeightRatio { get; set; }
 
-        public MainWindow(int a_zoneWidth, int a_zoneHeight)
+        private List<Tuple <Line, System.Windows.Shapes.Line>> Ground { get; set; }
+
+        public MainWindow(int a_zoneWidth, int a_zoneHeight, List<Tuple<int, int>> a_ground)
         {
             InitializeComponent();
 
@@ -37,29 +28,40 @@ namespace CodingGame_engine_MarsLander
             ZoneWidth = a_zoneWidth;
             ZoneHeight = a_zoneHeight;
 
-            WidthRatio = 1;
-            HeightRatio = 1;
+            double whratio = ZoneWidth / ZoneHeight;
+            Width = 1000;
+            Height = Width / whratio;
 
-            SizeChanged += new SizeChangedEventHandler(UpdateDrawRatio);
+            Ground = Enumerable.Range(1, a_ground.Count - 1).Select(i => new Tuple < Line, System.Windows.Shapes.Line >(
+                new Line(a_ground[i - 1].Item1, a_ground[i - 1].Item2, a_ground[i].Item1, a_ground[i].Item2),
+                new System.Windows.Shapes.Line
+                {
+                    Stroke = Brushes.Red,
+                    StrokeThickness = 3
+                }
+                )).ToList();
+
+            Ground.ForEach(g => Canvas.Children.Add(g.Item2));
+
+            Canvas.SizeChanged += new SizeChangedEventHandler(UpdateDrawRatio);   
         }
 
         public void UpdateDrawRatio(object sender, SizeChangedEventArgs e)
         {
             WidthRatio = e.NewSize.Width / ZoneWidth;
             HeightRatio = e.NewSize.Height / ZoneHeight;
+            Redraw((int) e.NewSize.Width, (int) e.NewSize.Height);
         }
 
-        public void DrawFloorLine(int a_x1, int a_y1, int a_x2, int a_y2)
+        private void Redraw(int a_canvasWidth, int a_canvasHeight)
         {
-            Line line = new Line();
-            line.Stroke = System.Windows.Media.Brushes.Red;
-            line.X1 = a_x1 * WidthRatio;
-            line.X2 = a_x2 * WidthRatio;
-            line.Y1 = a_y1 * HeightRatio;
-            line.Y2 = a_y2 * HeightRatio;
-            line.StrokeThickness = 1;
-            Canvas.Children.Add(line);
+            Ground.ForEach(g =>
+            {
+                g.Item2.X1 = g.Item1.StartX * WidthRatio;
+                g.Item2.Y1 = a_canvasHeight - g.Item1.StartY * HeightRatio;
+                g.Item2.X2 = g.Item1.EndX * WidthRatio;
+                g.Item2.Y2 = a_canvasHeight - g.Item1.EndY * HeightRatio;
+            }); 
         }
-
     }
 }
