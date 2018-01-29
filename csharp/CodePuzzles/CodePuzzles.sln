@@ -33,6 +33,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_engine_Base", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_OweWayCity", "CodingGame_community_OweWayCity\CodingGame_community_OweWayCity.csproj", "{801CF33D-BE7F-4801-8114-D86873EEAFA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AGPlayground", "AGPlayground\AGPlayground.csproj", "{3B2237D7-BBD7-4EC6-B2AD-302EB0D9E945}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_Hangman", "CodingGame_community_Hangman\CodingGame_community_Hangman.csproj", "{53FDA07A-95F3-4D65-8833-3895BF9F557E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_classic_Temperatures", "CodingGame_classic_Temperatures\CodingGame_classic_Temperatures.csproj", "{ED2FE7B6-4E5F-4D2E-B12F-79BA64A99CB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingGame_community_MinimalNumberOfSwaps", "CodingGame_community_MinimalNumberOfSwaps\CodingGame_community_MinimalNumberOfSwaps.csproj", "{843C3C91-6F3D-49A6-B019-BC0C52F921BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "Playground\Playground.csproj", "{504BF79C-2277-4D9A-ACED-02B4685DED28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +109,26 @@ Global
 		{801CF33D-BE7F-4801-8114-D86873EEAFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{801CF33D-BE7F-4801-8114-D86873EEAFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{801CF33D-BE7F-4801-8114-D86873EEAFA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B2237D7-BBD7-4EC6-B2AD-302EB0D9E945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B2237D7-BBD7-4EC6-B2AD-302EB0D9E945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B2237D7-BBD7-4EC6-B2AD-302EB0D9E945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B2237D7-BBD7-4EC6-B2AD-302EB0D9E945}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53FDA07A-95F3-4D65-8833-3895BF9F557E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53FDA07A-95F3-4D65-8833-3895BF9F557E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53FDA07A-95F3-4D65-8833-3895BF9F557E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53FDA07A-95F3-4D65-8833-3895BF9F557E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED2FE7B6-4E5F-4D2E-B12F-79BA64A99CB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED2FE7B6-4E5F-4D2E-B12F-79BA64A99CB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED2FE7B6-4E5F-4D2E-B12F-79BA64A99CB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED2FE7B6-4E5F-4D2E-B12F-79BA64A99CB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{843C3C91-6F3D-49A6-B019-BC0C52F921BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{843C3C91-6F3D-49A6-B019-BC0C52F921BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{843C3C91-6F3D-49A6-B019-BC0C52F921BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{843C3C91-6F3D-49A6-B019-BC0C52F921BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{504BF79C-2277-4D9A-ACED-02B4685DED28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{504BF79C-2277-4D9A-ACED-02B4685DED28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{504BF79C-2277-4D9A-ACED-02B4685DED28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{504BF79C-2277-4D9A-ACED-02B4685DED28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
